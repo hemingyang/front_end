@@ -27,6 +27,7 @@ npm install -g node-gyp
 
 ```linux
 vue.js 安装加脚手架工具
+
 npm  install vue -g  vue库
 
 npm install -g @vue/cli   vue官方脚手架工具
