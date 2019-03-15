@@ -87,6 +87,132 @@ $.ajax({
     }
     
 });
+
+
+请求跨域
+
+
+协议相同
+域名相同
+端口相同
+http://www.example.com/dir2/other.html：同源
+http://example.com/dir/other.html：不同源（域名不同）
+http://v2.www.example.com/dir/other.html：不同源（域名不同）
+http://www.example.com:81/dir/other.html：不同源（端口不同）
+
+《jsonp》方法
+
+function addsr(src){
+var script =document.createElement('script');
+script.setAttribute("type","text/javascript");
+script.src=src;
+document.body.appendChild(script);
+
+
+};
+
+window.onload=function(){
+addsr('http://example.com/ip?callback=foo');
+
+
+};
+
+function foo(data){
+console.log('response data:'+JSON.stringify(data));
+
+
+};
+
+
+foo({
+"test":"testDate"
+});
+
+spring boot后台配置《CORS过滤器》方法
+
+
+<!-- 跨域配置-->    
+<filter>
+        <!-- The CORS filter with parameters -->
+        <filter-name>CORS</filter-name>
+        <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+        
+        <!-- Note: All parameters are options, if omitted the CORS 
+             Filter will fall back to the respective default values.
+          -->
+        <init-param>
+            <param-name>cors.allowGenericHttpRequests</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.allowOrigin</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.allowSubdomains</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.supportedMethods</param-name>
+            <param-value>GET, HEAD, POST, OPTIONS</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.supportedHeaders</param-name>
+            <param-value>Accept, Origin, X-Requested-With, Content-Type, Last-Modified</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.exposedHeaders</param-name>
+            <!--这里可以添加一些自己的暴露Headers   -->
+            <param-value>X-Test-1, X-Test-2</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.supportsCredentials</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cors.maxAge</param-name>
+            <param-value>3600</param-value>
+        </init-param>
+
+    </filter>
+
+    <filter-mapping>
+        <!-- CORS Filter mapping -->
+        <filter-name>CORS</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    									<web.xml>
+    
+@Configuration
+public class CorsConfig {
+
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        
+        // 可以自行筛选
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        
+        return corsConfiguration;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        
+        source.registerCorsConfiguration("/**", buildConfig());
+        
+        return new CorsFilter(source);  
+    }
+}
 ```
 
 
