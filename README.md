@@ -50,7 +50,7 @@ react 安装
 
 npm install -g create-react-app  react官方模板库
 
-create-react-app hello-react  创建项目
+npm init create-react-app hello-react  创建项目
 
 npm start  启动项目 3000端口
 ```
